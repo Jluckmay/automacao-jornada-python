@@ -2,18 +2,36 @@
 import pyautogui
 import time
 import pandas as pd
+import plataform as plt
 
 # Configurações iniciais
 link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
 email = "exemplo@email.com"
 senha = "sua senha"
-navegador = "edge"
+
+sistema = plt.system()
+
+if sistema == "Windows":
+    navegador = "edge"
+    iniciar = "win"
+elif sistema == "Linux":
+    navegador = "firefox"
+    iniciar = "super"
+elif sistema == "Darwin":  # macOS
+    navegador = "safari"
+    iniciar = ["command", "space"]
+else:
+    raise Exception("Sistema operacional não suportado.")
 
 # Configurando o tempo de pausa entre as ações do PyAutoGUI
 pyautogui.PAUSE = 0.5
 
 # Abrir o navegador padrão Windows (Edge)
-pyautogui.press("win")
+if sistema == "Darwin":
+    pyautogui.hotkey(*iniciar)  # Pressiona Command + Space para abrir o Spotlight
+else:
+    pyautogui.press(iniciar)  # Pressiona a tecla de atalho para abrir o menu iniciar
+    
 pyautogui.write(navegador)
 pyautogui.press("enter")
 
