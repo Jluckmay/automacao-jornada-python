@@ -9,8 +9,10 @@ link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
 email = "exemplo@email.com"
 senha = "sua senha"
 
+# Detectando o sistema operacional
 sistema = plt.system()
 
+# Configurando o navegador e a tecla de atalho para abrir o menu iniciar
 if sistema == "Windows":
     navegador = "edge"
     iniciar = "win"
@@ -31,7 +33,7 @@ if sistema == "Darwin":
     pyautogui.hotkey(*iniciar)  # Pressiona Command + Space para abrir o Spotlight
 else:
     pyautogui.press(iniciar)  # Pressiona a tecla de atalho para abrir o menu iniciar
-    
+
 pyautogui.write(navegador)
 pyautogui.press("enter")
 
