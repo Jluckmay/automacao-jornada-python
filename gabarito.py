@@ -5,9 +5,10 @@ import pandas as pd
 import plataform as plt
 
 # Configurações iniciais
-link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
-email = "exemplo@email.com"
-senha = "sua senha"
+# link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
+link = "https://jluckmay.github.io/automacao-jornada-python/"
+email = "automacao@hashtag.com"
+senha = "senha_super_secreta"
 
 # Detectando o sistema operacional
 sistema = plt.system()

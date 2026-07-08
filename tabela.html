@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Automação / Automation</title>
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --text-color: #1f2937;
+            --card-bg: white;
+            --input-bg: white;
+            --border-color: #d1d5db;
+            --label-color: #4b5563;
+            --btn-primary: #10b981;
+            --btn-primary-hover: #059669;
+            --table-head-bg: #f9fafb;
+            --table-border: #e5e7eb;
+        }
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f9fafb;
+            --card-bg: #1f2937;
+            --input-bg: #374151;
+            --border-color: #4b5563;
+            --label-color: #d1d5db;
+            --table-head-bg: #374151;
+            --table-border: #4b5563;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; padding-bottom: 100px; transition: background-color 0.3s, color 0.3s; }
+        
+        /* Controles movidos para o canto inferior esquerdo */
+        .side-controls { position: fixed; bottom: 30px; left: 30px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+        .control-btn { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .control-btn:hover { border-color: #3b82f6; }
+
+        .container { background: var(--card-bg); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; max-width: 800px; margin-bottom: 2rem; transition: background-color 0.3s; margin-top: 20px;}
+        h1 { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: span 2; }
+        label { margin-bottom: 0.5rem; color: var(--label-color); font-weight: bold; font-size: 0.9rem; }
+        input, textarea { padding: 0.75rem; background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+        input:focus, textarea:focus { border-color: var(--btn-primary); }
+        button[type="submit"] { grid-column: span 2; padding: 0.75rem; background-color: var(--btn-primary); color: white; border: none; border-radius: 6px; font-size: 1.1rem; cursor: pointer; font-weight: bold; margin-top: 1rem; transition: background-color 0.2s; }
+        button[type="submit"]:hover { background-color: var(--btn-primary-hover); }
+        
+        table { width: 100%; max-width: 800px; border-collapse: collapse; background: var(--card-bg); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; transition: background-color 0.3s; }
+        th, td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--table-border); font-size: 0.9rem; }
+        th { background-color: var(--table-head-bg); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; transition: background-color 0.3s; }
+        tr:hover td { background-color: var(--table-head-bg); }
+
+        .simulacao-btn { position: fixed; bottom: 30px; right: 30px; padding: 15px 25px; background-color: #2563eb; color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; z-index: 1000; }
+        .simulacao-btn:hover { background-color: #1d4ed8; transform: translateY(-2px); }
+        .simulacao-btn.pausado { background-color: #ef4444; }
+        .simulacao-btn.pausado:hover { background-color: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <div class="side-controls">
+        <button id="btnLang" class="control-btn" tabindex="-1">🇬🇧 EN</button>
+        <button id="btnTheme" class="control-btn" tabindex="-1">🌙 Dark</button>
+    </div>
+
+    <div class="container">
+        <h1 id="txtTitle">Cadastrar Novo Produto</h1>
+        <form id="cadastroForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label id="lblCodigo">Código do Produto</label>
+                    <input type="text" id="codigo" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label id="lblMarca">Marca</label>
+                    <input type="text" id="marca" required>
+                </div>
+                <div class="form-group">
+                    <label id="lblTipo">Tipo</label>
+                    <input type="text" id="tipo" required>
+                </div>
+                <div class="form-group">
+                    <label id="lblCategoria">Categoria</label>
+                    <input type="text" id="categoria" required>
+                </div>
+                <div class="form-group">
+                    <label id="lblPreco">Preço Unitário</label>
+                    <input type="text" id="preco" required>
+                </div>
+                <div class="form-group">
+                    <label id="lblCusto">Custo</label>
+                    <input type="text" id="custo" required>
+                </div>
+                <div class="form-group full-width">
+                    <label id="lblObs">Observação (Opcional)</label>
+                    <textarea id="obs" rows="2"></textarea>
+                </div>
+                <button type="submit" id="btnSubmit">Cadastrar Produto</button>
+            </div>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th id="thCodigo">Código</th>
+                <th id="thMarca">Marca</th>
+                <th id="thTipo">Tipo</th>
+                <th id="thCategoria">Categoria</th>
+                <th id="thPreco">Preço</th>
+                <th id="thCusto">Custo</th>
+                <th id="thObs">Obs</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaBody">
+        </tbody>
+    </table>
+
+    <button id="btnSimulacao" class="simulacao-btn" tabindex="-1">
+        ▶ <span id="txtBtnSim">Iniciar Simulação</span>
+    </button>
+
+    <script>
+        // Declarar o estado da simulação no TOPO (corrige o bug da página quebrando)
+        let isPlaying = false;
+        let currentIndex = 0;
+
+        const produtos = [
+            { codigo: "MOU123", marca: "Logitech", tipo: "Mouse", categoria: "Periféricos", preco: "150.00", custo: "80.00", obs: "Sem fio" },
+            { codigo: "TEC456", marca: "Corsair", tipo: "Teclado", categoria: "Periféricos", preco: "350.00", custo: "180.00", obs: "Mecânico RGB" },
+            { codigo: "MON789", marca: "Dell", tipo: "Monitor", categoria: "Monitores", preco: "1200.00", custo: "800.00", obs: "27 polegadas 4K" },
+            { codigo: "NOT012", marca: "Apple", tipo: "Notebook", categoria: "Computadores", preco: "8500.00", custo: "5000.00", obs: "MacBook Air M2" },
+            { codigo: "CAD345", marca: "Herman Miller", tipo: "Cadeira", categoria: "Móveis", preco: "6000.00", custo: "3500.00", obs: "" }
+        ];
+
+        const dict = {
+            'pt': { title: "Cadastrar Novo Produto", lblCodigo: "Código do Produto", lblMarca: "Marca", lblTipo: "Tipo", lblCategoria: "Categoria", lblPreco: "Preço Unitário", lblCusto: "Custo", lblObs: "Observação (Opcional)", thCodigo: "Código", thMarca: "Marca", thTipo: "Tipo", thCategoria: "Categoria", thPreco: "Preço", thCusto: "Custo", thObs: "Obs", btnSubmit: "Cadastrar Produto", btnStart: "Iniciar Simulação", btnPause: "Pausar Simulação", btnResume: "Retomar Simulação", btnDone: "Simulação Concluída", langToggle: "🇬🇧 EN", themeLight: "☀️ Light", themeDark: "🌙 Dark" },
+            'en': { title: "Register New Product", lblCodigo: "Product Code", lblMarca: "Brand", lblTipo: "Type", lblCategoria: "Category", lblPreco: "Unit Price", lblCusto: "Cost", lblObs: "Observation (Optional)", thCodigo: "Code", thMarca: "Brand", thTipo: "Type", thCategoria: "Category", thPreco: "Price", thCusto: "Cost", thObs: "Obs", btnSubmit: "Register Product", btnStart: "Start Simulation", btnPause: "Pause Simulation", btnResume: "Resume Simulation", btnDone: "Simulation Completed", langToggle: "🇵🇹 PT", themeLight: "☀️ Light", themeDark: "🌙 Dark" }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'pt';
+        let isDarkMode = localStorage.getItem('theme') === 'dark';
+        const txtBtnSim = document.getElementById('txtBtnSim');
+        const btnSimulacao = document.getElementById('btnSimulacao');
+
+        function applyTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('btnTheme').innerText = dict[currentLang].themeLight;
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('btnTheme').innerText = dict[currentLang].themeDark;
+            }
+        }
+
+        function applyLang() {
+            document.getElementById('txtTitle').innerText = dict[currentLang].title;
+            document.getElementById('lblCodigo').innerText = dict[currentLang].lblCodigo;
+            document.getElementById('lblMarca').innerText = dict[currentLang].lblMarca;
+            document.getElementById('lblTipo').innerText = dict[currentLang].lblTipo;
+            document.getElementById('lblCategoria').innerText = dict[currentLang].lblCategoria;
+            document.getElementById('lblPreco').innerText = dict[currentLang].lblPreco;
+            document.getElementById('lblCusto').innerText = dict[currentLang].lblCusto;
+            document.getElementById('lblObs').innerText = dict[currentLang].lblObs;
+            document.getElementById('thCodigo').innerText = dict[currentLang].thCodigo;
+            document.getElementById('thMarca').innerText = dict[currentLang].thMarca;
+            document.getElementById('thTipo').innerText = dict[currentLang].thTipo;
+            document.getElementById('thCategoria').innerText = dict[currentLang].thCategoria;
+            document.getElementById('thPreco').innerText = dict[currentLang].thPreco;
+            document.getElementById('thCusto').innerText = dict[currentLang].thCusto;
+            document.getElementById('thObs').innerText = dict[currentLang].thObs;
+            document.getElementById('btnSubmit').innerText = dict[currentLang].btnSubmit;
+            document.getElementById('btnLang').innerText = dict[currentLang].langToggle;
+            
+            if(isPlaying) txtBtnSim.innerText = dict[currentLang].btnPause;
+            else if (currentIndex >= produtos.length) txtBtnSim.innerText = dict[currentLang].btnDone;
+            else if (currentIndex > 0) txtBtnSim.innerText = dict[currentLang].btnResume;
+            else txtBtnSim.innerText = dict[currentLang].btnStart;
+
+            document.getElementById('btnTheme').innerText = isDarkMode ? dict[currentLang].themeLight : dict[currentLang].themeDark;
+        }
+
+        applyTheme();
+        applyLang();
+
+        document.getElementById('btnTheme').addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            applyTheme();
+        });
+
+        document.getElementById('btnLang').addEventListener('click', () => {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            localStorage.setItem('lang', currentLang);
+            applyLang();
+        });
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function digitar(campoId, texto) {
+            const campo = document.getElementById(campoId);
+            campo.focus();
+            campo.value = ""; 
+            for (let i = 0; i < texto.length; i++) {
+                if (!isPlaying) return false; 
+                campo.value += texto.charAt(i);
+                await sleep(50); 
+            }
+            await sleep(200); 
+            return true;
+        }
+
+        async function rodarSimulacao() {
+            while (currentIndex < produtos.length && isPlaying) {
+                const p = produtos[currentIndex];
+                if (!await digitar('codigo', p.codigo)) break;
+                if (!await digitar('marca', p.marca)) break;
+                if (!await digitar('tipo', p.tipo)) break;
+                if (!await digitar('categoria', p.categoria)) break;
+                if (!await digitar('preco', p.preco)) break;
+                if (!await digitar('custo', p.custo)) break;
+                if (!await digitar('obs', p.obs)) break;
+
+                if (!isPlaying) break; 
+
+                document.getElementById('btnSubmit').focus();
+                await sleep(300);
+                document.getElementById('cadastroForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                
+                await sleep(1000); 
+                currentIndex++;
+            }
+
+            if (currentIndex >= produtos.length) {
+                isPlaying = false;
+                txtBtnSim.innerText = dict[currentLang].btnDone;
+                btnSimulacao.style.backgroundColor = "#10b981"; 
+                btnSimulacao.style.cursor = "default";
+                btnSimulacao.disabled = true;
+                localStorage.removeItem('simulacaoAtiva'); 
+            }
+        }
+
+        btnSimulacao.addEventListener('click', async () => {
+            if (currentIndex >= produtos.length) return; 
+            isPlaying = !isPlaying; 
+            if (isPlaying) {
+                txtBtnSim.innerText = dict[currentLang].btnPause;
+                btnSimulacao.innerHTML = "⏸ " + `<span id="txtBtnSim">${dict[currentLang].btnPause}</span>`;
+                btnSimulacao.classList.add("pausado");
+                rodarSimulacao(); 
+            } else {
+                txtBtnSim.innerText = dict[currentLang].btnResume;
+                btnSimulacao.innerHTML = "▶ " + `<span id="txtBtnSim">${dict[currentLang].btnResume}</span>`;
+                btnSimulacao.classList.remove("pausado");
+            }
+        });
+
+        document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+            e.preventDefault(); 
+            const newRow = document.createElement("tr");
+            const inputs = this.querySelectorAll("input, textarea");
+            inputs.forEach(input => {
+                if (input.type !== "submit" && input.type !== "button") {
+                    const td = document.createElement("td");
+                    td.textContent = input.value;
+                    newRow.appendChild(td);
+                }
+            });
+            document.getElementById("tabelaBody").appendChild(newRow);
+            this.reset();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            
+            // Retorna o foco pro primeiro input se não estiver em simulação
+            if(!isPlaying) inputs[0].focus(); 
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('simulacaoAtiva') === 'true') {
+                setTimeout(() => {
+                    isPlaying = true;
+                    btnSimulacao.innerHTML = "⏸ " + `<span id="txtBtnSim">${dict[currentLang].btnPause}</span>`;
+                    btnSimulacao.classList.add("pausado");
+                    rodarSimulacao();
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
